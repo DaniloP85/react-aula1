@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { Title, Box, AcUnitIconCustom, CustomBox } from "./HomeStyles";
@@ -9,7 +9,18 @@ function App() {
   const addCount = () => {
     setCount((count) => count + 1);
   };
-
+  
+  useEffect(() => {
+    console.log("chamando apos a renderizacao na inicializacao do componente")
+    const interval = setInterval(()=>{
+      setCount((count) => count + 1);
+    }, 1000)
+    return () => {
+      console.log("chamando no remocao do componente");
+      clearInterval(interval);
+    }
+  },[]);
+  
   return (
     <Box>
       <Grid
