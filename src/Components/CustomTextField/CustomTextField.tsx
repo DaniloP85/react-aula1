@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
-import Colors from '../../Utils/Common/Colors'
+import Colors from "../../Utils/Common/Colors";
 
 const RedditTextField = styled((props: any) => (
   <TextField InputProps={{ disableUnderline: true }} {...props} />
@@ -40,12 +40,7 @@ type IProps = {
   onChange?: Function;
   type?: string;
 };
-const CustomTextField = ({
-  label,
-  defaultValue,
-  onChange,
-  type,
-}:IProps) => {
+const CustomTextField = ({ label, defaultValue, onChange, type }: IProps) => {
   return (
     <RedditTextField
       label={label}

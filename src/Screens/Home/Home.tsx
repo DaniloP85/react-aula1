@@ -1,61 +1,51 @@
-import { useState, useEffect } from "react";
-import "./Home.css";
+import React, { useState, useEffect, } from "react";
+import { allPersons, IPersons } from "../../Interfaces/IPerson";
 
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import MaterialTable, { QueryResult } from "material-table";
-
 import { Title, TableHeaderStyle, TableRowStyle, TableSearchFieldStyle } from "./HomeStyles";
 
 import useAPI from "../../Services/APIs/Common/useAPI";
-import Persons from "../../Services/APIs/Persons/Persons";
-import { allPersons, IPersons } from "../../Interfaces/IPerson";
-import { CardActions, CardContent, CardMedia } from "@mui/material";
+import Person from "../../Services/APIs/Persons/Persons";
 import { useGeolocated } from "react-geolocated";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import MaterialTable, { QueryResult } from "material-table";
 
+import { useContext } from "react";
+import Header from "../../Components/Header/Header";
+import UserInfoContext, {
+  UserInfoContextType,
+} from "../../Store/UserInfo/UserInfoContext";
 
+export default function Home() {  
+  const getPersonAPI = useAPI(Person.getAllPersons);
+  let userCoordinates: GeolocationCoordinates | null = null;
+  const navigate: NavigateFunction = useNavigate();
+  const context = useContext<UserInfoContextType>(UserInfoContext);
 
-function App() {
-  // const [currentPersons, setCurrentPersons] = useState<IPersons | null>(null)
-  const [allPersons, setAllPersons] = useState<IPersons[]>([]);
-  const [isLoading, setIsLoading] = useState(false)
+  const columns = [
+    { title: "SobreNome", field: "lastName" },
+    { title: "Nome", field: "firstName" },
+    { title: "Telefone", field: "phone" },
+  ];
 
-  const getPersonAPI = useAPI(Persons.getAllPersons);
-  const navigate:NavigateFunction = useNavigate();
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+    });
 
-  let userCoordinates:GeolocationCoordinates |null =  null
-
-  const {coords, isGeolocationAvailable, isGeolocationEnabled} = useGeolocated({
-    positionOptions: {
-      enableHighAccuracy: false
-    },
-    userDecisionTimeout: 5000
-  })
-
-  if(isGeolocationAvailable && isGeolocationEnabled && coords){
-    console.log(coords);    
+  if (isGeolocationAvailable && isGeolocationEnabled && coords) {
+    console.log(coords.latitude + " - " + coords.longitude);
     userCoordinates = coords;
   }
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getPersonAPI.requestPromise()
-  //   .then((allPersons: allPersons) => {
-  //     setIsLoading(false);
-  //     setAllPersons(allPersons.persons);
-  //   })
-  //   .catch((info: any) => {
-  //     console.log(info);
-  //     setIsLoading(false);      
-  //   })
-  // },[])
 
   const getData = (query: any): Promise<QueryResult<{ [x: string]: {} }>> => {
     return new Promise((resolve, reject) => {
       console.log(query);
-  
+
       let page = query.page + 1;
       let info = `page=${page}&perPage=${query.pageSize}`;
       if (query.orderBy !== undefined && query.orderBy !== "") {
@@ -102,14 +92,10 @@ function App() {
       },
     });
   };
-
-  const columns = [
-    { title: "SobreNome", field: "lastName" },
-    { title: "Nome", field: "firstName" },
-    { title: "Telefone", field: "phone" },
-  ];
   
-  return (
+return (
+  <>
+    <Header />
     <Grid
       container
       spacing={0}
@@ -119,7 +105,7 @@ function App() {
     >
       <Grid item xs={12}>
         <Title gutterBottom variant="h1" color="primary.dark">
-          Lista de Colaboradores
+          Lista de Colaboradores, {context.userInfo.userName}
         </Title>
       </Grid>
       <Grid item xs={12}>
@@ -151,7 +137,6 @@ function App() {
         />
       </Grid>
     </Grid>
-  );
+  </>
+);
 }
-
-export default App;
