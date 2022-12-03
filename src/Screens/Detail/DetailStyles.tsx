@@ -2,6 +2,13 @@ import styled from "styled-components";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
+
+export const MainGrid = styled(Grid)`
+  && {
+    text-align: center;
+  }
+`;
 
 export const MainStack = styled(Stack)`
   && {
