@@ -1,66 +1,51 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { CustomCard, TitleTopPage } from "./HomeStyles";
-import useAPI from '../../Service/APIs/Common/useAPI';
-import Person from '../../Service/APIs/Persons/Persons'
+import React, { useState, useEffect } from "react";
 import { AllPersons, IPerson } from "../../Interfaces/IPerson";
 
-function App() {
-  const [cards, setCards] = useState<JSX.Element[]>([]);
+import Grid from "@mui/material/Grid";
+import { Title, Main, CustomLink } from "./HomeStyles";
+
+import useAPI from "../../Service/APIs/Common/useAPI";
+import Person from "../../Service/APIs/Persons/Persons";
+
+export default function Home() {
+  const [currentPerson, setCurrentPerson] = useState<IPerson|null>(null)
   const getPersonAPI = useAPI(Person.getPersons);
 
   useEffect(() => {
-    getPersonAPI.requestPromise()
-      .then((AllPersons: AllPersons) => {
-        let mountCards: JSX.Element[] = [];
-        AllPersons.persons.forEach((person: IPerson)=>{
-          mountCards.push(
-            <Grid key={person._id} item lg={4} md={6} sm={12}>
-              <CustomCard >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={person.image}
-                  alt="green iguana"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {person.firstName} {person.lastName}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {person.jobTitle}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </CustomCard>
-            </Grid>
-
-          )
-        })
-        setCards(mountCards)
+    getPersonAPI
+      .requestPromise()
+      .then((info: AllPersons) => {
+        setCurrentPerson(info.persons[0])
       })
       .catch((info: any) => {
         console.log(info);
       });
   }, []);
   
+  let name = "";
+  if (currentPerson) {
+    name = currentPerson?.firstName + " " + currentPerson?.lastName;
+  }  
   return (
-    <Container>
-      <TitleTopPage>
-        <Typography variant="h1" color="primary">Usuários</Typography>
-      </TitleTopPage>
-      <Grid container>{cards}</Grid>
-    </Container>
-  );
-}
+    <Main>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Title gutterBottom variant="h1" color="primary.dark">
+          Person {name}
+        </Title>
 
-export default App;
+        <CustomLink to="detail/1" >
+          Detail 1
+        </CustomLink>
+        <CustomLink to="detail/2" >
+          Detail 2
+        </CustomLink>
+      </Grid>
+    </Main>
+  );
+};
