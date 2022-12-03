@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-
+import Container from "@mui/material/Container";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -54,9 +54,12 @@ function App() {
   }, []);
   
   return (
-    <>
-      {cards}
-    </>
+    <Container>
+      <TitleTopPage>
+        <Typography variant="h1" color="primary">Usuários</Typography>
+      </TitleTopPage>
+      <Grid container>{cards}</Grid>
+    </Container>
   );
 }
 
