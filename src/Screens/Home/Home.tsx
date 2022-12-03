@@ -3,7 +3,7 @@ import "./Home.css";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import MaterialTable from "material-table";
+import MaterialTable, { QueryResult } from "material-table";
 import { CustomLink, Main, Title } from "./HomeStyles";
 import useAPI from "../../Services/APIs/Common/useAPI";
 import Persons from "../../Services/APIs/Persons/Persons";
@@ -13,12 +13,13 @@ import { useGeolocated } from "react-geolocated";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 
 
+
 function App() {
   // const [currentPersons, setCurrentPersons] = useState<IPersons | null>(null)
   const [allPersons, setAllPersons] = useState<IPersons[]>([]);
   const [isLoading, setIsLoading] = useState(false)
 
-  const getPersonAPI = useAPI(Persons.getPersons)
+  const getPersonAPI = useAPI(Persons.getAllPersons);
   const navigate:NavigateFunction = useNavigate();
 
   let userCoordinates:GeolocationCoordinates |null =  null
@@ -35,18 +36,50 @@ function App() {
     userCoordinates = coords;
   }
 
-  useEffect(() => {
-    setIsLoading(true);
-    getPersonAPI.requestPromise()
-    .then((allPersons: allPersons) => {
-      setIsLoading(false);
-      setAllPersons(allPersons.persons);
-    })
-    .catch((info: any) => {
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getPersonAPI.requestPromise()
+  //   .then((allPersons: allPersons) => {
+  //     setIsLoading(false);
+  //     setAllPersons(allPersons.persons);
+  //   })
+  //   .catch((info: any) => {
+  //     console.log(info);
+  //     setIsLoading(false);      
+  //   })
+  // },[])
+
+  const getData = (query: any): Promise<QueryResult<{ [x: string]: {} }>> => {
+    return new Promise((resolve, reject) => {
+      console.log(query);
+  
+      let page = query.page + 1;
+      let info = `page=${page}&perPage=${query.pageSize}`;
+      if (query.orderBy !== undefined && query.orderBy !== "") {
+        info += `&orderBy=${query.orderBy.field}`;
+      }
+      if (query.orderDirection !== undefined && query.orderDirection !== "") {
+        info += `&orderDirection=${query.orderDirection}`;
+      }
+      if (query.search !== undefined && query.search !== "") {
+        info += `&search=${query.search}`;
+      }
       console.log(info);
-      setIsLoading(false);      
-    })
-  },[])
+      getPersonAPI
+        .requestPromise(info)
+        .then((info: any) => {
+          console.log(info);
+          resolve({
+            data: info.persons,
+            page: info.page - 1,
+            totalCount: info.totalItems,
+          });
+        })
+        .catch((error: string) => {
+          console.log(error);
+        });
+    });
+  };
 
   const onChangePage = (person: IPersons) => {
     navigate("Detail/" + person._id, {
@@ -68,14 +101,14 @@ function App() {
     <Main>
       <MaterialTable
           columns={columns}
-          data={allPersons}
+          data={getData}
           isLoading={isLoading}
           actions={[
             {
               icon: "visibility",
               tooltip: "See Detail",
               onClick: (event, rowData) => {
-                onChangePage(rowData as IPersons);
+                onChangePage(rowData as unknown as IPersons);
               },
             },
           ]}
