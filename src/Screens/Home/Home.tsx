@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import "./Home.css";
+
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import MaterialTable, { QueryResult } from "material-table";
-import { CustomLink, Main, Title } from "./HomeStyles";
+// import { CustomLink, Main, Title } from "./HomeStyles";
+import { Main, TableHeaderStyle, TableRowStyle, TableSearchFieldStyle } from "./HomeStyles";
+
 import useAPI from "../../Services/APIs/Common/useAPI";
 import Persons from "../../Services/APIs/Persons/Persons";
 import { allPersons, IPersons } from "../../Interfaces/IPerson";
@@ -116,6 +119,9 @@ function App() {
             showTitle: false,
             search: true,
             actionsColumnIndex: -1,
+            headerStyle: TableHeaderStyle,
+            rowStyle: TableRowStyle,
+            searchFieldStyle: TableSearchFieldStyle,
           }}
         />
     </Main>
