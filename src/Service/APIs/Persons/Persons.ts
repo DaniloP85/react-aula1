@@ -5,5 +5,5 @@ const getPersons = (prodID: string) => api.get("/persons/getPersons/" + prodID);
 
 export default {
   getPersons,
-//   getPersonsPost,
+  // getPersonsPost,
 };
