@@ -1,8 +1,8 @@
-export interface AllPersons {
-    persons: IPerson[];
+export interface allPersons {
+    persons: IPersons[];
   }
   
-  export interface IPerson {
+  export interface IPersons  {
     _id: string;
     prodID: string;
     title: string;

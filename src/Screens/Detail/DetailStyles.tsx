@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 
 export const MainStack = styled(Stack)`
   && {
-    margin-top: 150px;
+    margin-top: 80px;
     text-align: center;
     width: 100%;
     align-items: center;
@@ -21,4 +21,10 @@ export const ButtonMaxSize = styled(Button)`
   && {
     max-width: 200px;
   }
+`;
+
+export const StyledMap = styled.div`
+  margin-top: 40px;
+  width: "100%";
+  height: 400px;
 `;

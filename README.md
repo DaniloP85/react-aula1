@@ -23,4 +23,4 @@ Constroi o aplicativo para produção na pasta `build`.\
 
 Seu aplicativo estará pronto para ser enviado ao servidor!
 
-### [Material de apoio](https://joserubensrodrigues.notion.site/Aula-2-Layouts-e-React-Router-Parte-B-7de39fad28964f73ba0ea725190c1e2a)
+### [Material de apoio](https://joserubensrodrigues.notion.site/Aula-3-GeoLocation-useContext-ac1eca9d278947cb977843755afae056)
