@@ -22,3 +22,5 @@ Abra [http://localhost:3000](http://localhost:3000) para visualizá-lo no seu na
 Constroi o aplicativo para produção na pasta `build`.\
 
 Seu aplicativo estará pronto para ser enviado ao servidor!
+
+### [Material de apoio](https://joserubensrodrigues.notion.site/Aula-2-Layouts-e-React-Router-6260d9d2ab804ac2953bd5d2ab8a21ad)
