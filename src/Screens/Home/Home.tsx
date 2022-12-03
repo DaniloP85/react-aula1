@@ -5,8 +5,8 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import MaterialTable, { QueryResult } from "material-table";
-// import { CustomLink, Main, Title } from "./HomeStyles";
-import { Main, TableHeaderStyle, TableRowStyle, TableSearchFieldStyle } from "./HomeStyles";
+
+import { Title, TableHeaderStyle, TableRowStyle, TableSearchFieldStyle } from "./HomeStyles";
 
 import useAPI from "../../Services/APIs/Common/useAPI";
 import Persons from "../../Services/APIs/Persons/Persons";
@@ -94,6 +94,15 @@ function App() {
     });
   };
 
+  const onAddPage = () => {
+    navigate("add/", {
+      state: {
+        lat: userCoordinates!.latitude,
+        lng: userCoordinates!.longitude,
+      },
+    });
+  };
+
   const columns = [
     { title: "SobreNome", field: "lastName" },
     { title: "Nome", field: "firstName" },
@@ -101,11 +110,27 @@ function App() {
   ];
   
   return (
-    <Main>
-      <MaterialTable
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      justifyContent="left"
+      alignItems="left"
+    >
+      <Grid item xs={12}>
+        <Title gutterBottom variant="h1" color="primary.dark">
+          Lista de Colaboradores
+        </Title>
+      </Grid>
+      <Grid item xs={12}>
+        <Button variant="primary" onClick={() => onAddPage()}>
+          Adicionar Colaborador
+        </Button>
+      </Grid>
+      <Grid item lg={12}>
+        <MaterialTable
           columns={columns}
           data={getData}
-          isLoading={isLoading}
           actions={[
             {
               icon: "visibility",
@@ -124,7 +149,8 @@ function App() {
             searchFieldStyle: TableSearchFieldStyle,
           }}
         />
-    </Main>
+      </Grid>
+    </Grid>
   );
 }
 
